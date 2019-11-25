@@ -80,7 +80,9 @@ defmodule GlassFactoryApi.Vacations do
 =======
   or an tuple with `:error` and a string with the error description.
 
-  It's possible apply some filters, like user_id, start_date, end_date and vacation_type using the query_string param.
+  It's possible apply some filters, like user_id, start and end to limit dates, and vacation_type
+  using the query_string param.
+
   ## Examples
 
   iex> GlassFactoryApi.Clients.get_vacation()
@@ -111,7 +113,7 @@ defmodule GlassFactoryApi.Vacations do
     ]
   }
 
-  iex> GlassFactoryApi.Clients.get_vacation([user_id: 734])
+  iex> GlassFactoryApi.Clients.get_vacation([user_id: 734, start: 2019-07-01, end: 2019-07-31])
   {:ok,
     [
       %Vacation{
@@ -129,7 +131,11 @@ defmodule GlassFactoryApi.Vacations do
   }
 
   iex> GlassFactoryApi.Clients.get_vacation("1")
+<<<<<<< HEAD
   {:error, "Vacations not found"}
+>>>>>>> Add documentation to get_vacations function
+=======
+  {:ok, []}
 >>>>>>> Add documentation to get_vacations function
   """
 
