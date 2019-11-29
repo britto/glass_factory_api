@@ -1,6 +1,6 @@
 defmodule GlassFactoryApi.Clients.Reports do
   alias GlassFactoryApi.ApiClient
-  alias GlassFactoryApi.Clients.Reports.TimeReport
+  alias GlassFactoryApi.Clients.Reports.{TimeReport, RatesAndCostsReport}
 
   @doc """
   List time reports from the given client id
@@ -67,5 +67,29 @@ defmodule GlassFactoryApi.Clients.Reports do
     else
       {:error, message} -> raise message
     end
+  end
+
+  def list_rates_and_costs_reports(client_id, opts \\ [], config \\ []) do
+    client_request =
+      ApiClient.get("clients/#{client_id}/reports/money", filter_opts(opts), config)
+
+    with {:ok, %{status: 200, body: body}} <- client_request do
+      rates_and_costs_reports = Enum.map(body, &RatesAndCostsReport.to_struct(&1))
+
+      {:ok, rates_and_costs_reports}
+    else
+      {:ok, %{status: 404}} ->
+        {:error, "Can't find rates and costs reports for client id #{client_id}"}
+
+      {:ok, %{body: body}} ->
+        {:error, body}
+
+      {:error, error} ->
+        {:error, error}
+    end
+  end
+
+  defp filter_opts(opts) do
+    Keyword.take(opts, [:start, :end, :user_id, :date, :project_id])
   end
 end
